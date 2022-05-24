@@ -8,6 +8,7 @@ use Spotler\Modules\Audience;
 use Spotler\Modules\Contact;
 use Spotler\Modules\Campaign;
 use Spotler\Modules\CampaignMailing;
+use Spotler\Modules\Subscribe;
 use Spotler\Modules\Templist;
 
 class SpotlerClient
@@ -22,6 +23,7 @@ class SpotlerClient
     public CampaignMailing $campaignMailing;
     public Templist        $templist;
     public Audience        $audience;
+    public Subscribe       $subscribe;
 
 
 
@@ -35,6 +37,7 @@ class SpotlerClient
         $this->campaignMailing = new CampaignMailing($this);
         $this->templist        = new Templist($this);
         $this->audience        = new Audience($this);
+        $this->subscribe       = new Subscribe($this);
     }
 
 
