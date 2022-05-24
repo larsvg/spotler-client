@@ -1,84 +1,38 @@
 <?php
+
 namespace Spotler;
 
 use Spotler\Exceptions\SpotlerException;
 
-/**
- * Class Client
- *
- * @package   spotler-client
- * @author    Stephan Eizinga <stephan@monkeysoft.nl>
- * @copyright 2019 Stephan Eizinga
- * @link      https://github.com/steffjenl/spotler-client
- */
 class Client
 {
-    /**
-     * @var string $consumerKey
-     */
-    private $consumerKey;
-    /**
-     * @var string $consumerSecret
-     */
-    private $consumerSecret;
-    /**
-     * @var string $bashUrl
-     */
-    private $bashUrl = 'https://restapi.mailplus.nl';
-    /**
-     * @var string $certificate
-     */
-    private $certificate;
-    /**
-     * @var string $certificate
-     */
-    private $verifyCertificate;
+    private string  $consumerKey;
+    private string  $consumerSecret;
+    private string  $bashUrl        = 'https://restapi.mailplus.nl';
+    private ?string $certificate    = null;
+    private string  $verifyCertificate;
+    private string  $oauthSignature = 'HMAC-SHA1';
+    private string  $oauthVersion   = '1.0';
+    private int     $responseCode;
+    private         $responseBody;
 
-    /**
-     * @var string
-     */
-    private $oauthSignature = 'HMAC-SHA1';
 
-    /**
-     * @var string
-     */
-    private $oauthVersion = '1.0';
 
-    /**
-     * @var $responseCode int
-     */
-    private $responseCode;
-
-    /**
-     * @var $responseBody
-     */
-    private $responseBody;
-
-    /**
-     * Client constructor.
-     *
-     * @param string $consumerKey
-     * @param string $consumerSecret
-     * @param string $certificate
-     * @param bool   $verifyCertificate
-     */
-    public function __construct($consumerKey, $consumerSecret, $certificate = null, $verifyCertificate = true)
-    {
-        $this->consumerKey = $consumerKey;
-        $this->consumerSecret = $consumerSecret;
-        $this->certificate = $certificate;
+    public function __construct(
+        string  $consumerKey,
+        string  $consumerSecret,
+        ?string $certificate = null,
+        bool    $verifyCertificate = true
+    ) {
+        $this->consumerKey       = $consumerKey;
+        $this->consumerSecret    = $consumerSecret;
+        $this->certificate       = $certificate;
         $this->verifyCertificate = $verifyCertificate;
     }
 
-    /**
-     * execute
-     *
-     * @param string $endpoint
-     * @return mixed
-     * @throws SpotlerException
-     * @throws
-     */
-    public function execute($endpoint, $method = 'GET', $data = null)
+
+
+    public function execute(string $endpoint, string $method = 'GET', $data = null)
     {
         $headers = [
             "Accept: application/json",
@@ -96,7 +50,7 @@ class Client
         $curl = $this->setExecuteMethode($curl, $method, $data);
         $curl = $this->setVerifyHostCertificate($curl);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        $response = curl_exec($curl);
+        $response           = curl_exec($curl);
         $this->responseBody = $response;
         $this->responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         // when $response return false we have a critical error
@@ -107,39 +61,30 @@ class Client
         return $response;
     }
 
-    /**
-     * @return int
-     */
-    public function getLastResponseCode()
+
+
+    public function getLastResponseCode(): int
     {
         return $this->responseCode;
     }
 
-    /**
-     * @return mixed
-     */
+
+
     public function getLastResponseBody()
     {
         return $this->responseBody;
     }
 
-    /**
-     * setExecuteMethode will set curl options
-     *
-     * @param $curl
-     * @param string $method
-     * @param mixed $data
-     * @param mixed $filePath
-     * @return mixed
-     */
-    private function setExecuteMethode($curl, $method, $data = null)
+
+
+    private function setExecuteMethode(string $curl, string $method, $data = null)
     {
         if ($method == 'DELETE') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
-        } else if ($method == 'PUT') {
+        } elseif ($method == 'PUT') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-        } else if ($method == 'POST') {
+        } elseif ($method == 'POST') {
             curl_setopt($curl, CURLOPT_POST, 1);
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
         }
@@ -147,19 +92,8 @@ class Client
     }
 
 
-    /**
-     * setVerifyHostCertificate
-     *
-     * @param resource $curl
-     *
-     * @return mixed
-     * @throws \ParagonIE\Certainty\Exception\BundleException
-     * @throws \ParagonIE\Certainty\Exception\EncodingException
-     * @throws \ParagonIE\Certainty\Exception\FilesystemException
-     * @throws \ParagonIE\Certainty\Exception\RemoteException
-     * @throws \SodiumException
-     */
-    private function setVerifyHostCertificate($curl)
+
+    private function setVerifyHostCertificate(string $curl)
     {
         if ($this->verifyCertificate) {
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
@@ -171,19 +105,16 @@ class Client
         return $curl;
     }
 
-    /**
-     * createAuthorizationHeader
-     *
-     * @return string
-     */
-    private function createAuthorizationHeader($method, $endpoint)
+
+
+    private function createAuthorizationHeader($method, $endpoint): string
     {
         $authParams = [
-            'oauth_consumer_key' => $this->consumerKey,
+            'oauth_consumer_key'     => $this->consumerKey,
             'oauth_signature_method' => $this->oauthSignature,
-            'oauth_timestamp' => time(),
-            'oauth_nonce' => md5(microtime(true)),
-            'oauth_version' => $this->oauthVersion
+            'oauth_timestamp'        => time(),
+            'oauth_nonce'            => md5(microtime(true)),
+            'oauth_version'          => $this->oauthVersion,
         ];
 
         $authParams['oauth_signature'] = $this->createSignature($authParams, $method, $endpoint);
@@ -196,15 +127,9 @@ class Client
         return 'OAuth ' . implode(',', $authParamsValues);
     }
 
-    /**
-     * createSignature
-     *
-     * @param array $authParams
-     * @param string $method
-     * @param string $endpoint
-     * @return string
-     */
-    private function createSignature($authParams, $method, $endpoint)
+
+
+    private function createSignature(array $authParams, string $method, string $endpoint): string
     {
         $sigBase = strtoupper($method) . "&" . rawurlencode($this->bashUrl . '/' . $endpoint) . "&"
             . rawurlencode("oauth_consumer_key=" . rawurlencode($this->consumerKey)
@@ -212,7 +137,7 @@ class Client
                 . "&oauth_signature_method=" . rawurlencode($this->oauthSignature)
                 . "&oauth_timestamp=" . $authParams['oauth_timestamp']
                 . "&oauth_version=" . $this->oauthVersion);
-        $sigKey = $this->consumerSecret . "&";
+        $sigKey  = $this->consumerSecret . "&";
 
         return base64_encode(hash_hmac("sha1", $sigBase, $sigKey, true));
     }

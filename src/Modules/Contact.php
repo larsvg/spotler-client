@@ -1,44 +1,49 @@
 <?php
+
 namespace Spotler\Modules;
 
+use Spotler\Exceptions\SpotlerException;
 use Spotler\Models\ContactRequest;
 
-/**
- * Class Contact
- *
- * @package   spotler-client
- * @author    Stephan Eizinga <stephan@monkeysoft.nl>
- * @copyright 2019 Stephan Eizinga
- * @link      https://github.com/steffjenl/spotler-client
- */
 class Contact extends AbstractModule
 {
     /**
-     * @param ContactRequest $contactRequest
-     * @return bool
-     * @throws \Spotler\Exceptions\SpotlerException
+     * @throws SpotlerException
      */
-    public function postContact(ContactRequest $contactRequest)
+    public function add(ContactRequest $contactRequest): bool
     {
-        $response   = $this->client->execute('integrationservice-1.1.0/contact', 'POST', $contactRequest);
-        if ($this->client->getLastResponseCode() == 204)
-        {
+        $response = $this->client->execute('integrationservice-1.1.0/contact', 'POST', $contactRequest);
+        if ($this->client->getLastResponseCode() == 204) {
             return true;
         }
         return false;
     }
 
+
+
     /**
-     * @return array|bool
-     * @throws \Spotler\Exceptions\SpotlerException
+     * @throws SpotlerException
      */
-    public function getProperties()
+    public function update(ContactRequest $contactRequest): bool
     {
-        $response   = $this->client->execute('integrationservice-1.1.0/contact/properties/list', 'GET');
-        if ($this->client->getLastResponseCode() == 200)
-        {
-            return $response;
+        $response = $this->client->execute('integrationservice-1.1.0/contact', 'PUT', $contactRequest);
+        if ($this->client->getLastResponseCode() == 204) {
+            return true;
         }
         return false;
+    }
+
+
+
+    /**
+     * @throws SpotlerException
+     */
+    public function show(): ?array
+    {
+        $response = $this->client->execute('integrationservice-1.1.0/contact/properties/list', 'GET');
+        if ($this->client->getLastResponseCode() == 200) {
+            return $response;
+        }
+        return null;
     }
 }
