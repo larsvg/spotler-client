@@ -7,6 +7,7 @@ use Spotler\Exceptions\SpotlerException;
 use Spotler\Modules\Contact;
 use Spotler\Modules\Campaign;
 use Spotler\Modules\CampaignMailing;
+use Spotler\Modules\Templist;
 
 class SpotlerClient
 {
@@ -15,9 +16,10 @@ class SpotlerClient
     private Client          $client;
     private int             $responseCode;
     private                 $responseBody;
-    private Contact         $contact;
-    private Campaign        $campaign;
-    private CampaignMailing $campaignMailing;
+    public Contact         $contact;
+    public Campaign        $campaign;
+    public CampaignMailing $campaignMailing;
+    public Templist         $templist;
 
 
 
@@ -29,6 +31,7 @@ class SpotlerClient
         $this->contact         = new Contact($this);
         $this->campaign        = new Campaign($this);
         $this->campaignMailing = new CampaignMailing($this);
+        $this->templist        = new Templist($this);
     }
 
 
@@ -88,26 +91,5 @@ class SpotlerClient
     public function getLastResponseBody()
     {
         return $this->responseBody;
-    }
-
-
-
-    public function contact() : Contact
-    {
-        return $this->contact;
-    }
-
-
-
-    public function campaign(): Campaign
-    {
-        return $this->campaign;
-    }
-
-
-
-    public function campaignMailing(): CampaignMailing
-    {
-        return $this->campaignMailing;
     }
 }
