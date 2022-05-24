@@ -4,6 +4,7 @@ namespace Spotler\Modules;
 
 use Spotler\Exceptions\SpotlerException;
 use Spotler\Models\ContactRequest;
+use stdClass;
 
 class Contact extends AbstractModule
 {
@@ -38,12 +39,33 @@ class Contact extends AbstractModule
     /**
      * @throws SpotlerException
      */
-    public function show(): ?array
+    public function show(ContactRequest $contactRequest): ?stdClass
     {
-        $response = $this->client->execute('integrationservice-1.1.0/contact/properties/list', 'GET');
-        if ($this->client->getLastResponseCode() == 200) {
-            return $response;
+        $response = $this->client->execute(
+            'integrationservice-1.1.0/contact/' . $contactRequest->contact->externalId,
+            'GET'
+        );
+        if ($this->client->getLastResponseCode() !== 200) {
+            return null;
         }
-        return null;
+        return $response;
+    }
+
+
+
+    public function inactive(ContactRequest $contactRequest): ?bool
+    {
+        try {
+            $response = $this->client->execute(
+                'integrationservice-1.1.0/contact/inactivate/' . $contactRequest->contact->externalId,
+                'PUT'
+            );
+            if ($this->client->getLastResponseCode() !== 204) {
+                return false;
+            }
+            return true;
+        } catch (SpotlerException $e) {
+            return null;
+        }
     }
 }

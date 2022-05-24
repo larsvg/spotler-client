@@ -2,6 +2,7 @@
 
 namespace Spotler;
 
+use CurlHandle;
 use Spotler\Exceptions\SpotlerException;
 
 class Client
@@ -80,7 +81,7 @@ class Client
 
 
 
-    private function setExecuteMethode(string $curl, string $method, $data = null): string
+    private function setExecuteMethode(CurlHandle $curl, string $method, $data = null): CurlHandle
     {
         if ($method == 'DELETE') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
@@ -96,7 +97,7 @@ class Client
 
 
 
-    private function setVerifyHostCertificate(string $curl): string
+    private function setVerifyHostCertificate(CurlHandle $curl): CurlHandle
     {
         if ($this->verifyCertificate) {
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
