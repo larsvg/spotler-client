@@ -4,6 +4,7 @@ namespace Spotler;
 
 use Exception;
 use Spotler\Exceptions\SpotlerException;
+use Spotler\Modules\Audience;
 use Spotler\Modules\Contact;
 use Spotler\Modules\Campaign;
 use Spotler\Modules\CampaignMailing;
@@ -11,15 +12,16 @@ use Spotler\Modules\Templist;
 
 class SpotlerClient
 {
-    private string          $consumerKey;
-    private string          $consumerSecret;
-    private Client          $client;
-    private int             $responseCode;
-    private                 $responseBody;
+    private string         $consumerKey;
+    private string         $consumerSecret;
+    private Client         $client;
+    private int            $responseCode;
+    private                $responseBody;
     public Contact         $contact;
     public Campaign        $campaign;
     public CampaignMailing $campaignMailing;
-    public Templist         $templist;
+    public Templist        $templist;
+    public Audience        $audience;
 
 
 
@@ -32,6 +34,7 @@ class SpotlerClient
         $this->campaign        = new Campaign($this);
         $this->campaignMailing = new CampaignMailing($this);
         $this->templist        = new Templist($this);
+        $this->audience        = new Audience($this);
     }
 
 

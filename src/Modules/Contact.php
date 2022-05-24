@@ -53,6 +53,17 @@ class Contact extends AbstractModule
 
 
 
+    public function list()
+    {
+        $response = $this->client->execute('integrationservice-1.1.0/contact/properties/list', 'GET');
+        if ($this->client->getLastResponseCode() == 200) {
+            return $response;
+        }
+        return false;
+    }
+
+
+
     public function inactive(ContactRequest $contactRequest): ?bool
     {
         try {
