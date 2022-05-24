@@ -32,7 +32,10 @@ class Client
 
 
 
-    public function execute(string $endpoint, string $method = 'GET', $data = null)
+    /**
+     * @throws SpotlerException
+     */
+    public function execute(string $endpoint, string $method = 'GET', $data = null): bool|string
     {
         $headers = [
             "Accept: application/json",
@@ -77,7 +80,7 @@ class Client
 
 
 
-    private function setExecuteMethode(string $curl, string $method, $data = null)
+    private function setExecuteMethode(string $curl, string $method, $data = null): string
     {
         if ($method == 'DELETE') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
@@ -93,7 +96,7 @@ class Client
 
 
 
-    private function setVerifyHostCertificate(string $curl)
+    private function setVerifyHostCertificate(string $curl): string
     {
         if ($this->verifyCertificate) {
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);

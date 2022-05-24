@@ -8,14 +8,6 @@ use Spotler\Modules\Contact;
 use Spotler\Modules\Campaign;
 use Spotler\Modules\CampaignMailing;
 
-/**
- * Class SpotlerClient
- *
- * @package   spotler-client
- * @author    Stephan Eizinga <stephan@monkeysoft.nl>
- * @copyright 2019 Stephan Eizinga
- * @link      https://github.com/steffjenl/spotler-client
- */
 class SpotlerClient
 {
     private string          $consumerKey;
