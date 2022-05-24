@@ -12,11 +12,13 @@
     "phpunit/phpunit": "^7.0",
     "mockery/mockery": "^1.0",
     "squizlabs/php_codesniffer": "^3.1",
-    "psy/psysh": "^0.8.13"
+    "psy/psysh": "^0.8.13",
+    "jetbrains/phpstorm-attributes": "*"
   },
   "require": {
     "ext-curl": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "illuminate/collections": "*"
   },
   "license": "MIT",
   "authors": [
