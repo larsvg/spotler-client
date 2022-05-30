@@ -81,6 +81,9 @@ class SpotlerClient
 
             return $data;
         } catch (Exception $ex) {
+            if ($ex->getCode() === 404) {
+                return false;
+            }
             throw new SpotlerException($ex);
         }
     }
