@@ -8,16 +8,17 @@ use stdClass;
 
 class Contact extends AbstractModule
 {
-    /**
-     * @throws SpotlerException
-     */
     public function add(ContactRequest $contactRequest): bool
     {
-        $response = $this->client->execute('integrationservice-1.1.0/contact', 'POST', $contactRequest);
-        if ($this->client->getLastResponseCode() == 204) {
-            return true;
+        try {
+            $response = $this->client->execute('integrationservice-1.1.0/contact', 'POST', $contactRequest);
+            if ($this->client->getLastResponseCode() == 204) {
+                return true;
+            }
+            return false;
+        } catch (SpotlerException $e) {
+            return false;
         }
-        return false;
     }
 
 
