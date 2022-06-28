@@ -28,6 +28,7 @@ $contact = $client->contact->show($contactRequest);
 /**
  * Add contact if it does not exist
  */
+
 if (empty($contact)) {
     if ($client->contact->add($contactRequest)) {
         $contact = $client->contact->show($contactRequest);
@@ -35,8 +36,9 @@ if (empty($contact)) {
 }
 
 /**
- * List all properties of contact
+ * List all properties
  */
+
 var_dump(Properties::getPermissions($client->contact->list())?->entries);
 
 
