@@ -9,3 +9,4 @@ Install the package using composer:
 ```bash
 composer require larsvg/spotler-client
 ```
+
