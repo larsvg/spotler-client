@@ -40,6 +40,25 @@ class Contact extends AbstractModule
     /**
      * @throws SpotlerException
      */
+    public function search(string $email)
+    {
+        $response = $this->client->execute(
+            'integrationservice/contact/search?pageSize=1&MPSearchQuery=email%3D' . $email,
+            'GET',
+        );
+
+        if ($this->client->getLastResponseCode() !== 200) {
+            return null;
+        }
+
+        return $response;
+    }
+
+
+
+    /**
+     * @throws SpotlerException
+     */
     public function show(ContactRequest $contactRequest): ?stdClass
     {
         $response = $this->client->execute(
