@@ -51,7 +51,7 @@ class Contact extends AbstractModule
             return null;
         }
 
-        return $response;
+        return collect($response->contacts)->first();
     }
 
 
