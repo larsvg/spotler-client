@@ -154,7 +154,7 @@ class Client
         $parameters = array_merge($queryParams, $encodeParams);
         
         // Sort parameters by key
-		ksort($parameters);
+	ksort($parameters);
 
         // urlencode parameters
         foreach ($parameters as $key => $value) {
@@ -163,8 +163,8 @@ class Client
 
         // Rebuild query string, replace & and = with urlencoded equivalents
         $paramString = http_build_query($parameters);
-		$paramString = str_replace('&', '%26', $paramString);
-		$paramString = str_replace('=', '%3D', $paramString);
+	$paramString = str_replace('&', '%26', $paramString);
+	$paramString = str_replace('=', '%3D', $paramString);
 
         $sigBase = strtoupper($method) . '&' . rawurlencode($this->bashUrl . '/' . $endpoint) . '&' . $paramString;
         $sigKey  = $this->consumerSecret . '&';
