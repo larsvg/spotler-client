@@ -12,7 +12,7 @@ class Campaign extends AbstractModule
      */
     public function getList()
     {
-        $response = $this->client->execute('integrationservice-1.1.0/campaign/list', 'GET');
+        $response = $this->client->execute('integrationservice/campaign/list', 'GET');
         return $response;
     }
 
@@ -24,7 +24,7 @@ class Campaign extends AbstractModule
     public function postCampaignTrigger($encryptedTriggerId, CampaignTriggerRequest $campaignTriggerRequest): bool
     {
         $response = $this->client->execute(
-            'integrationservice-1.1.0/campaign/trigger/' . $encryptedTriggerId,
+            'integrationservice/campaign/trigger/' . $encryptedTriggerId,
             'POST',
             $campaignTriggerRequest
         );

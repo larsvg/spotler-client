@@ -11,7 +11,7 @@ class Contact extends AbstractModule
     public function add(ContactRequest $contactRequest): bool
     {
         try {
-            $response = $this->client->execute('integrationservice-1.1.0/contact', 'POST', $contactRequest);
+            $response = $this->client->execute('integrationservice/contact', 'POST', $contactRequest);
             if ($this->client->getLastResponseCode() == 204) {
                 return true;
             }
@@ -28,7 +28,7 @@ class Contact extends AbstractModule
      */
     public function update(ContactRequest $contactRequest): bool
     {
-        $response = $this->client->execute('integrationservice-1.1.0/contact', 'PUT', $contactRequest);
+        $response = $this->client->execute('integrationservice/contact', 'PUT', $contactRequest);
         if ($this->client->getLastResponseCode() == 204) {
             return true;
         }
@@ -62,7 +62,7 @@ class Contact extends AbstractModule
     public function show(ContactRequest $contactRequest): ?stdClass
     {
         $response = $this->client->execute(
-            'integrationservice-1.1.0/contact/' . $contactRequest->contact->externalId,
+            'integrationservice/contact/' . $contactRequest->contact->externalId,
             'GET'
         );
         if ($this->client->getLastResponseCode() !== 200) {
@@ -75,7 +75,7 @@ class Contact extends AbstractModule
 
     public function list()
     {
-        $response = $this->client->execute('integrationservice-1.1.0/contact/properties/list', 'GET');
+        $response = $this->client->execute('integrationservice/contact/properties/list', 'GET');
         if ($this->client->getLastResponseCode() == 200) {
             return $response;
         }
@@ -88,7 +88,7 @@ class Contact extends AbstractModule
     {
         try {
             $response = $this->client->execute(
-                'integrationservice-1.1.0/contact/inactivate/' . $contactRequest->contact->externalId,
+                'integrationservice/contact/inactivate/' . $contactRequest->contact->externalId,
                 'PUT'
             );
             if ($this->client->getLastResponseCode() !== 204) {

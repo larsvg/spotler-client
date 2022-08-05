@@ -14,7 +14,7 @@ class Audience extends AbstractModule
     public function show(ContactRequest $contactRequest): ?stdClass
     {
         $response = $this->client->execute(
-            'integrationservice-1.1.0/audience/' . $contactRequest->contact->externalId,
+            'integrationservice/audience/' . $contactRequest->contact->externalId,
             'GET'
         );
         if ($this->client->getLastResponseCode() !== 200) {

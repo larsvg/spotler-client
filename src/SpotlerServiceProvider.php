@@ -1,4 +1,5 @@
 <?php
+
 namespace Spotler;
 
 /**
@@ -19,12 +20,11 @@ class SpotlerServiceProvider extends \Illuminate\Support\ServiceProvider
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            $this->commands(
-                [
-                ]
-            );
+            $this->commands([]);
         }
     }
+
+
 
     /**
      * register
@@ -32,11 +32,14 @@ class SpotlerServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            SpotlerClient::class, function ($app) {
-                return new SpotlerClient(config('services.spotler.consumerKey'), config('services.spotler.consumerSecret'));
-            }
+            SpotlerClient::class, function($app) {
+            return new SpotlerClient(config('services.spotler.consumerKey'), config('services.spotler.consumerSecret'));
+        }
         );
     }
+
+
+
     /**
      * Get the services provided by the provider.
      *

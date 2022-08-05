@@ -13,7 +13,7 @@ class Subscribe extends AbstractModule
      */
     public function subscribe($contactRequest): bool
     {
-        $response = $this->client->execute('integrationservice-1.1.0/subscription/subscribe', 'POST', $contactRequest);
+        $response = $this->client->execute('integrationservice/subscription/subscribe', 'POST', $contactRequest);
         if ($this->client->getLastResponseCode() == 204) {
             return true;
         }
