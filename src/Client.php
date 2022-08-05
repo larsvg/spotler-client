@@ -135,14 +135,40 @@ class Client
 
     private function createSignature(array $authParams, string $method, string $endpoint): string
     {
-        $sigBase = strtoupper($method) . "&" . rawurlencode($this->bashUrl . '/' . $endpoint) . "&"
-            . rawurlencode("oauth_consumer_key=" . rawurlencode($this->consumerKey)
-                . "&oauth_nonce=" . rawurlencode($authParams['oauth_nonce'])
-                . "&oauth_signature_method=" . rawurlencode($this->oauthSignature)
-                . "&oauth_timestamp=" . $authParams['oauth_timestamp']
-                . "&oauth_version=" . $this->oauthVersion);
-        $sigKey  = $this->consumerSecret . "&";
+        // Compose signature according to https://oauth.net/core/1.0a/#anchor46
+        // Split query parameters from $endpoint
+        $parts    = explode('?', $endpoint);
+        $endpoint = $parts[0];
+        parse_str(($parts[1] ?? ''), $queryParams);
+		
+        // Required parameters
+        $encodeParams = [
+            'oauth_consumer_key'     => $this->consumerKey,
+            'oauth_nonce'            => $authParams['oauth_nonce'],
+            'oauth_signature_method' => $this->oauthSignature,
+            'oauth_timestamp'        => $authParams['oauth_timestamp'],
+            'oauth_version'          => $this->oauthVersion,
+        ];
 
-        return base64_encode(hash_hmac("sha1", $sigBase, $sigKey, true));
+        // Merge custom paramterers
+        $parameters = array_merge($queryParams, $encodeParams);
+        
+        // Sort parameters by key
+	ksort($parameters);
+
+        // urlencode parameters
+        foreach ($parameters as $key => $value) {
+            $parameters[$key] = rawurlencode($value);
+        }
+
+        // Rebuild query string, replace & and = with urlencoded equivalents
+        $paramString = http_build_query($parameters);
+	$paramString = str_replace('&', '%26', $paramString);
+	$paramString = str_replace('=', '%3D', $paramString);
+
+        $sigBase = strtoupper($method) . '&' . rawurlencode($this->bashUrl . '/' . $endpoint) . '&' . $paramString;
+        $sigKey  = $this->consumerSecret . '&';
+
+        return base64_encode(hash_hmac('sha1', $sigBase, $sigKey, true));
     }
 }
