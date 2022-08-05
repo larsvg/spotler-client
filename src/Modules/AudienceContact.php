@@ -14,7 +14,7 @@ class AudienceContact extends AbstractModule
     public function show(ContactRequest $contactRequest): bool
     {
         $response = $this->client->execute(
-            'integrationservice-1.1.0/audience/' . $contactRequest->contact->externalId . '/contact',
+            'integrationservice/audience/' . $contactRequest->contact->externalId . '/contact',
             'POST',
             $contactRequest
         );
