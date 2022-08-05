@@ -61,6 +61,7 @@ class SpotlerClient
             if ($this->client->getLastResponseCode() == 204) {
                 return true;
             }
+
             if ($this->client->getLastResponseCode() > 299) {
                 $data = json_decode($response);
                 if ($data === null) {

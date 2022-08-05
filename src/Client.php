@@ -20,10 +20,10 @@ class Client
 
 
     public function __construct(
-        string  $consumerKey,
-        string  $consumerSecret,
+        string $consumerKey,
+        string $consumerSecret,
         ?string $certificate = null,
-        bool    $verifyCertificate = true
+        bool $verifyCertificate = true
     ) {
         $this->consumerKey       = $consumerKey;
         $this->consumerSecret    = $consumerSecret;
@@ -140,7 +140,7 @@ class Client
         $parts    = explode('?', $endpoint);
         $endpoint = $parts[0];
         parse_str(($parts[1] ?? ''), $queryParams);
-		
+
         // Required parameters
         $encodeParams = [
             'oauth_consumer_key'     => $this->consumerKey,
@@ -152,9 +152,9 @@ class Client
 
         // Merge custom paramterers
         $parameters = array_merge($queryParams, $encodeParams);
-        
+
         // Sort parameters by key
-	ksort($parameters);
+        ksort($parameters);
 
         // urlencode parameters
         foreach ($parameters as $key => $value) {
@@ -163,8 +163,8 @@ class Client
 
         // Rebuild query string, replace & and = with urlencoded equivalents
         $paramString = http_build_query($parameters);
-	$paramString = str_replace('&', '%26', $paramString);
-	$paramString = str_replace('=', '%3D', $paramString);
+        $paramString = str_replace('&', '%26', $paramString);
+        $paramString = str_replace('=', '%3D', $paramString);
 
         $sigBase = strtoupper($method) . '&' . rawurlencode($this->bashUrl . '/' . $endpoint) . '&' . $paramString;
         $sigKey  = $this->consumerSecret . '&';

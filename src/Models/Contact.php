@@ -1,20 +1,21 @@
 <?php
+
 namespace Spotler\Models;
 
 use stdClass;
 
 class Contact
 {
-    const CONTACT_CHANNEL_SMS   = 'SMS';
+    const CONTACT_CHANNEL_SMS = 'SMS';
     const CONTACT_CHANNEL_EMAIL = 'EMAIL';
-    public string    $externalId;
-    public string    $created;
-    public string    $encryptedId;
-    public bool      $testGroup = false;
-    public string    $lastChanged;
-    public string    $temporary;
+    public string   $externalId;
+    public string   $created;
+    public string   $encryptedId;
+    public bool     $testGroup = false;
+    public string   $lastChanged;
+    public string   $temporary;
     public stdClass $properties;
-    public array     $channels  = [];
+    public array    $channels  = [];
 
 
 

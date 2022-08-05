@@ -30,7 +30,7 @@ class Properties
 
     public static function modifyPermission(Collection $permissions, int $bit, bool $enabled): Collection
     {
-        return $permissions->map(function ($item, $key) use ($bit, $enabled) {
+        return $permissions->map(function($item, $key) use ($bit, $enabled) {
             if ($item->bit === $bit) {
                 $item->enabled = $enabled;
             }
